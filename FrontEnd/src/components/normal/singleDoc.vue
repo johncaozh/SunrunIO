@@ -1,0 +1,88 @@
+<template>
+    <div class="horizontalDiv root">
+        <transition name="main">
+            <el-card class="card" style="min-width:300px" :body-style="{ padding: '0px' }" v-if="data">
+                <div class="verticalDiv">
+                    <div class="circleDiv">
+                        <file-icon :fileName="data.name" style="width:64px;height:64px" />
+                    </div>
+                    <h3>{{data.name}}
+                    </h3>
+                    <p style="line-height:20px;text-align:center">
+                        <br/> {{data.size|sizeUnitConverter(data.size)}}
+                        <br/>{{data.createdDate|dateConverter(null)}}
+                    </p>
+                    <div class="bottomOperate" @click="download(data._id)">
+                        立即下载
+                    </div>
+                </div>
+            </el-card>
+        </transition>
+        <empty v-show="data==null&&!loading" content="这里的东西被外星人偷走了" />
+        <loading v-if="loading" />
+    </div>
+</template>
+
+<script>
+import api from '../../config/api'
+import fileIcon from '../common/fileIcon'
+import download from '../../config/mixin/download'
+import loading from '../common/loading'
+import empty from '../common/empty'
+
+export default {
+    mixins: [download],
+    data() {
+        return {
+            id: null,
+            data: null,
+            loading: false,
+        }
+    },
+
+    components: {
+        fileIcon,
+        loading,
+        empty,
+    },
+
+    mounted() {
+        this.id = this.$route.params.id;
+        this.getData();
+    },
+
+    methods: {
+        getData() {
+            this.data = null;
+            this.loading = true;
+            api.getDoc(this.id)
+                .then(res => {
+                    this.data = res.data.data;
+                    this.loading = false;
+                })
+                .catch(error => {
+                    this.loading = false;
+                    this.$message.error('获取失败。');
+                });
+        }
+    }
+}
+</script>
+
+<style scoped>
+.root {
+    margin-top: 100px;
+    justify-content: center;
+    align-items: flex-start
+}
+
+.main-enter-active {
+    transition: all 1.2s
+}
+
+.main-enter {
+    transform: scale(0.5);
+}
+</style>
+
+    
