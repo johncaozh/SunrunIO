@@ -25,8 +25,8 @@ const frontEndConfig = {
 const notificationConfig = {
     sunrunIM: {
         id: "24a70a1fb0b947bbb46f2a4ce11b1fbe", //本系统在SunrunIM平台上的业务账号
-        api: "https://10.21.21.42:8443/skapi/v2/business/send", //sunrunIM用于发送消息的API接口
-        // api: "http://10.21.21.42:8080/skapi/v2/business/send", //sunrunIM用于发送消息的API接口
+        // api: "https://10.21.21.42:8443/skapi/v2/business/send", //sunrunIM用于发送消息的API接口
+        api: "http://10.21.21.42:8080/skapi/v2/business/send", //sunrunIM用于发送消息的API接口
     },
     email: {
         host: "smtp.exmail.qq.com",

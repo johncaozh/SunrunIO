@@ -230,7 +230,8 @@ export default {
 .avatar-container {
   display: flex;
   justify-content: flex-start;
-  width: 100%;
+  align-items: center;
+  width: 100px;
   height: 100px;
 }
 

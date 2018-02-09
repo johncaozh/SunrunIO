@@ -12,7 +12,6 @@
                     <img src="../../../dist/img/wechatQR.jpg" style="width:160px;height:160px" />
                 </div>
             </el-popover>
-            </el-popover>
             <span>
                 <i class="icon-el-icon-wechat elementdoc" v-popover:popover1/>
                 <a href="http://www.gzsunrun.cn/" target="_blank" style="margin-left:20px" title="Sunrun官网">
