@@ -134,7 +134,7 @@ img.banner-stars {
 
 .banner-desc {
   padding-left: 200px;
-  top: 0px;
+  top: -20px;
   font-size: 46px;
   position: relative;
   z-index: 10;

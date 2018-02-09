@@ -158,7 +158,7 @@ export default {
 
     goToDetail(productId) {
       sessionStorage.setProductId(productId);
-      this.$router.push("/manager/versions");
+      this.$router.push("/manager/packages");
     },
 
     handleAvatarSuccess(res, file) {
