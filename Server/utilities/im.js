@@ -49,7 +49,7 @@ function sendMessage(fromUserId, toUserId, msgBody) {
     };
 
     var postJO = {
-        content:  (contentJO)
+        content: JSON.stringify(contentJO)
     }
 
     rq({

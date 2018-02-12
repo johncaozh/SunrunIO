@@ -5,6 +5,10 @@ function getFriendlySizeUnit(bytes) {
 };
 
 function getServerIp() {
+
+    require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+        console.log('addr: ' + add);
+    })
     var os = require('os');
     var ifaces = os.networkInterfaces();
     var values = Object.keys(ifaces)
