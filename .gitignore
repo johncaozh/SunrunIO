@@ -1,4 +1,5 @@
 node_modules
 Server/node_modules
 Server/logs
+Server/files
 ForeEnd/node_modules

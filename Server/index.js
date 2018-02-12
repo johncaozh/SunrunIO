@@ -13,6 +13,7 @@ var routerDocument = require("./routers/document");
 var routerVersion = require("./routers/version");
 var routerPlatform = require("./routers/platform");
 var routerPackage = require("./routers/package");
+var routerLink = require("./routers/link");
 var routerIam = require("./routers/iam");
 var email = require("./utilities/email");
 var im = require("./utilities/im");
@@ -99,6 +100,7 @@ app.use("/", routerDocument);
 app.use("/", routerVersion);
 app.use("/", routerPlatform);
 app.use("/", routerPackage);
+app.use("/", routerLink);
 app.use("/", routerIam.router);
 
 //生成特定格式的响应

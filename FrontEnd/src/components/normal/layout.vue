@@ -2,7 +2,7 @@
   <div>
     <div>
       <logo class="logo" />
-      <authentication class="authentication" style="margin-top:-6px"/>
+      <authentication class="authentication" style="margin-top:-6px" />
       <div class="banner">
         <div class="banner-sky">
         </div>
@@ -15,12 +15,11 @@
         </div>
       </div>
       <el-row style="margin-top:-287px">
-        <el-menu theme="dark" :default-active="defaultActive" mode="horizontal" :router="true" class="menu" style="padding:20px;background-color:transparent;padding-right:120px;">
+        <el-menu theme="dark" :default-active="defaultActive" mode="horizontal" :router="true" class="menu" style="padding:20px;background-color:transparent;padding-right:150px;">
           <el-menu-item index="docs" style="float:right">文档</el-menu-item>
           <el-menu-item index="faqs" style="float:right">FAQ</el-menu-item>
           <el-menu-item index="packages" style="float:right">安装包</el-menu-item>
         </el-menu>
-        </el-col>
         <el-col :span="20" style="height: 100%;overflow:auto;width:100%;padding-top:200px">
           <keep-alive>
             <router-view></router-view>
@@ -56,7 +55,8 @@ export default {
 
   computed: {
     defaultActive: function() {
-      return this.$route.path.replace("/", "");
+      var lastIndex = this.$route.path.lastIndexOf("/");
+      return this.$route.path.slice(lastIndex + 1);
     }
   },
 

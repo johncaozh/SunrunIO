@@ -16,11 +16,11 @@
 
 <script>
 import api from "../../config/api";
-import env from "../../config/env"
-import sessionStorage from '../../config/sessionStore'
-import versionList from './common/versionList'
-import newestPackageList from './common/newestPackageList'
-import packageList from './common/packageList'
+import env from "../../config/env";
+import sessionStorage from "../../config/sessionStore";
+import versionList from "./common/versionList";
+import newestPackageList from "./common/newestPackageList";
+import packageList from "./common/packageList";
 
 export default {
   data() {
@@ -28,9 +28,9 @@ export default {
       productId: null,
       platforms: [],
       selectedVersionId: null,
-      activeName: '最新版',
-      tab: null,
-    }
+      activeName: "最新版",
+      tab: null
+    };
   },
 
   components: {
@@ -41,28 +41,25 @@ export default {
 
   computed: {
     currentTab: function() {
-      if (!this.activeName)
-        return null;
+      if (!this.activeName) return null;
 
       var ele = this.$refs[this.activeName];
 
-      if (!ele)
-        return null;
+      if (!ele) return null;
 
-      if (ele instanceof Array)
-        return ele[0];
+      if (ele instanceof Array) return ele[0];
 
       return ele;
     }
   },
 
   mounted() {
-    this.productId = sessionStorage.getProductId();
+    this.productId = this.$route.params.id;
+    sessionStorage.setProductId(this.productId);
 
     if (!this.productId) {
       this.$router.push("/products");
-    }
-    else {
+    } else {
       this.getPlatforms();
     }
   },
@@ -70,12 +67,13 @@ export default {
   methods: {
     getPlatforms() {
       if (this.productId) {
-        api.getPlatforms(this.productId)
+        api
+          .getPlatforms(this.productId)
           .then(res => {
             this.platforms = res.data.data;
           })
           .catch(error => {
-            this.$message.error('获取失败。');
+            this.$message.error("获取失败。");
           });
       }
     },
@@ -91,11 +89,10 @@ export default {
     },
 
     handleTabClick(tab, event) {
-      if (this.currentTab)
-        this.currentTab.refresh();
+      if (this.currentTab) this.currentTab.refresh();
     }
   }
-}
+};
 </script> 
 
 <style scoped>
@@ -114,7 +111,7 @@ export default {
   padding-right: 40px;
 }
 
-@media screen and (max-width:1000px) {
+@media screen and (max-width: 1000px) {
   .divRoot {
     flex-direction: column;
     align-items: center;

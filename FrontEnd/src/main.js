@@ -12,8 +12,10 @@ import filter from './config/filter'
 import commonCss from '../dist/css/common.css'
 import cardCss from '../dist/css/card.css'
 import sessionStore from "./config/sessionStore"
+import VueClipboard from 'vue-clipboard2'
 
 Vue.config.productionTip = false
+Vue.use(VueClipboard);
 Vue.use(elementUI);
 Vue.use(VueLazyload, {
   preLoad: 1.3,
@@ -23,6 +25,7 @@ Vue.use(VueLazyload, {
 })
 
 router.beforeEach(function (to, from, next) {
+  window.scrollTo(0, 0)
   if (to.path.indexOf("/manager/") !== -1) {
     if (!sessionStore.getLogonUser()) {
       next("/login");

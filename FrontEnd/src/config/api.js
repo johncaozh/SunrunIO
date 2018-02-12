@@ -160,6 +160,27 @@ export default {
     return axios.put(env.serverConfig.packagesSegment + "/" + id, data);
   },
 
+  getLinks(id) {
+    var url = env.serverConfig.linksSegment;
+    return axios.get(url);
+  },
+
+  createLink(data) {
+    return axios.post(env.serverConfig.linksSegment, data);
+  },
+
+  getLink(id) {
+    return axios.get(env.serverConfig.linksSegment + "/" + id);
+  },
+
+  deleteLink(id) {
+    return axios.delete(env.serverConfig.linksSegment + "/" + id);
+  },
+
+  updateLink(id, data) {
+    return axios.put(env.serverConfig.linksSegment + "/" + id, data);
+  },
+
   getUsers(id) {
     var url = env.serverConfig.productsSegment + "/" + id + "/" + env.serverConfig.usersSegment;
     return axios.get(url);

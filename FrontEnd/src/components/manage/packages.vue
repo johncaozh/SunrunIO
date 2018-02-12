@@ -1,13 +1,13 @@
  <template>
   <div>
     <div class="slotInHeader">
-      <el-button type="primary" @click="dialogFormVisible = true">新建</el-button>
+      <el-button type="primary" @click="dialogFormVisible = true">上传安装包</el-button>
     </div>
     <el-dialog title="新建" :visible.sync="dialogFormVisible" @close="resetForm('form')" @open="openedForm">
       <el-form :model="form" ref="form">
-        <el-form-item label="请选择安装包" :rules="[ { required: true, message: '请选择上传一个文件'}]" prop="path">
-          <el-upload :action="uploadUrl" :show-file-list="false" :auto-upload="true" :with-credentials="true" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-            <el-button size="small" type="primary">点击上传</el-button>
+        <el-form-item label="请选择安装包" :rules="[ { required: true, message: '请选择上传一个文件或者等待文件上传完毕'}]" prop="path">
+          <el-upload ref="uploader" :action="uploadUrl" :multiple="false" :on-remove="handleRemove" :auto-upload="true" :with-credentials="true" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+            <el-button size="small" type="primary" v-if="!uploadFile">点击上传</el-button>
           </el-upload>
         </el-form-item>
         <el-form-item label="请输入安装包名称" :rules="[ { required: true, message: '请输入安装包名称'}]" prop="name">
@@ -50,7 +50,7 @@
           </P>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="安装包" min-width="300" sortable>
+      <el-table-column prop="name" label="安装包" min-width="260" sortable>
         <template scope="scope">
           <div class="horizontalDiv">
             <div class="circleDiv namePrefix">
@@ -60,7 +60,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="size" label="大小" min-width="100" sortable>
+      <el-table-column prop="size" label="大小" min-width="80" sortable>
         <template scope="scope">
           {{scope.row.size|sizeUnitConverter(scope.row.size)}}
         </template>
@@ -70,7 +70,7 @@
           {{scope.row.publishDate|dateConverter(null)}}
         </template>
       </el-table-column>
-      <el-table-column prop="version" label="版本" min-width="100" sortable>
+      <el-table-column prop="version" label="版本" min-width="80" sortable>
       </el-table-column>
       <el-table-column prop="_version.name" label="大版本" min-width="100" sortable>
       </el-table-column>
@@ -81,7 +81,7 @@
           {{scope.row.public?'是':'否'}}
         </template>
       </el-table-column>
-       <!-- <el-table-column prop="createTime" label="创建时间" min-width="100" sortable>
+      <!-- <el-table-column prop="createTime" label="创建时间" min-width="100" sortable>
         <template scope="scope">
           {{scope.row.createTime|dateConverter(null)}}
         </template>
@@ -93,13 +93,14 @@
       </el-table-column> -->
       <el-table-column prop="_createUser.name" label="创建者" min-width="100" sortable>
       </el-table-column>
-      <el-table-column prop="_lastUpdateUser.name" label="最后修改者" min-width="100" sortable>
+      <el-table-column prop="_lastUpdateUser.name" label="修改者" min-width="100" sortable>
       </el-table-column>
-      <el-table-column label="操作菜单" min-width="100">
+      <el-table-column label="操作菜单" min-width="140">
         <template scope="scope">
           <el-button type="text" size="small" @click="editData(scope.row)">编辑</el-button>
           <el-button type="text" size="small" @click="deleteData(scope.row._id)">删除</el-button>
           <el-button type="text" size="small" @click="download(scope.row._id)">下载</el-button>
+          <el-button type="text" size="small" @click="copyLink(scope.row._id)">复制链接</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -113,6 +114,7 @@ import { quillEditor } from "vue-quill-editor";
 import osPlatform from "../common/osPlatform";
 import download from "../../config/mixin/download";
 import message from "../../config/mixin/message";
+import faqsVue from "./faqs.vue";
 
 export default {
   mixins: [download, message],
@@ -124,6 +126,7 @@ export default {
       platforms: [],
       loading: false,
       dialogFormVisible: false,
+      uploadFile: null,
       form: {
         name: "",
         size: "",
@@ -136,7 +139,6 @@ export default {
         _platform: "",
         _product: ""
       },
-
       dataWait2Edit: null,
       productId: null,
       uploadUrl: env.serverConfig.serverUploadUrl
@@ -211,6 +213,18 @@ export default {
       });
     },
 
+    copyLink(id) {
+      var instance = this;
+      this.$copyText(`${window.location.host}/packages/${id}`).then(
+        function(e) {
+          instance.showSuccess("已复制到剪贴板。");
+        },
+        function(e) {
+          instance.showError(null, "复制到剪贴板失败。");
+        }
+      );
+    },
+
     editData(data) {
       this.dataWait2Edit = data;
       this.form.name = this.dataWait2Edit.name;
@@ -233,12 +247,17 @@ export default {
 
       if (group && group.length > 0) this.form.version = group[0];
       else this.form.version = "";
-
+      this.uploadFile = file;
       return true;
     },
 
     handleAvatarSuccess(res, file) {
       this.form.path = res.data;
+      this.showSuccess("上传安装包完成。");
+    },
+
+    handleRemove(file, fileList) {
+      this.uploadFile = null;
     },
 
     submitForm(formName) {
@@ -273,6 +292,8 @@ export default {
     },
 
     resetForm(formName) {
+      this.$refs.uploader.clearFiles();
+      this.uploadFile = null;
       this.$refs[formName].resetFields();
       this.dialogFormVisible = false;
       this.dataWait2Edit = null;

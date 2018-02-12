@@ -1,7 +1,7 @@
  <template>
   <div>
     <div class="slotInHeader">
-      <el-button type="primary" @click="dialogFormVisible = true">新建</el-button>
+      <el-button type="primary" @click="dialogFormVisible = true">新建版本</el-button>
     </div>
     <el-dialog title="新建" :visible.sync="dialogFormVisible" @close="resetForm('form')">
       <el-form :model="form" ref="form">
@@ -55,9 +55,9 @@
       </el-table-column> -->
       <el-table-column prop="_createUser.name" label="创建者" min-width="100" sortable>
       </el-table-column>
-      <el-table-column prop="_lastUpdateUser.name" label="最后修改者" min-width="100" sortable>
+      <el-table-column prop="_lastUpdateUser.name" label="修改者" min-width="100" sortable>
       </el-table-column>
-      <el-table-column label="操作菜单" min-width="50">
+      <el-table-column label="操作菜单" min-width="100">
         <template scope="scope">
           <el-button type="text" size="small" @click="editData(scope.row)">编辑</el-button>
           <el-button type="text" size="small" @click="deleteData(scope.row._id)">删除</el-button>
@@ -69,10 +69,10 @@
 
 <script>
 import api from "../../config/api";
-import env from "../../config/env"
-import sessionStorage from '../../config/sessionStore'
-import { quillEditor } from 'vue-quill-editor'
-import message from '../../config/mixin/message'
+import env from "../../config/env";
+import sessionStorage from "../../config/sessionStore";
+import { quillEditor } from "vue-quill-editor";
+import message from "../../config/mixin/message";
 
 export default {
   mixins: [message],
@@ -85,11 +85,11 @@ export default {
         name: "",
         desc: "",
         publishDate: "",
-        public: true,
+        public: true
       },
       dataWait2Edit: null,
       productId: null
-    }
+    };
   },
 
   components: {
@@ -99,16 +99,15 @@ export default {
   mounted() {
     this.productId = sessionStorage.getProductId();
 
-    if (this.productId)
-      this.listData();
-    else
-      this.$router.push("/products");
+    if (this.productId) this.listData();
+    else this.$router.push("/products");
   },
 
   methods: {
     listData() {
       this.loading = true;
-      api.getVersions(this.productId)
+      api
+        .getVersions(this.productId)
         .then(res => {
           this.tableData = res.data.data;
           this.loading = false;
@@ -119,21 +118,21 @@ export default {
     },
 
     deleteData(id) {
-      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          api.deleteVersion(id)
-            .then(res => {
-              this.showSuccess_Delete();
-              this.tableData.remove("_id", id);
-            })
-            .catch(error => {
-              this.showError_Delete(error);
-            })
-        });
+      this.$confirm("此操作将永久删除, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        api
+          .deleteVersion(id)
+          .then(res => {
+            this.showSuccess_Delete();
+            this.tableData.remove("_id", id);
+          })
+          .catch(error => {
+            this.showError_Delete(error);
+          });
+      });
     },
 
     editData(data) {
@@ -147,11 +146,11 @@ export default {
     },
 
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
-
           if (this.dataWait2Edit) {
-            api.updateVersion(this.dataWait2Edit._id, this.form)
+            api
+              .updateVersion(this.dataWait2Edit._id, this.form)
               .then(res => {
                 this.showSuccess_Update();
                 this.resetForm(formName);
@@ -159,11 +158,11 @@ export default {
               })
               .catch(error => {
                 this.showError_Update(error);
-              })
-          }
-          else {
+              });
+          } else {
             this.form._product = this.productId;
-            api.createVersion(this.form)
+            api
+              .createVersion(this.form)
               .then(res => {
                 this.showSuccess_Create();
                 this.resetForm(formName);
@@ -171,7 +170,7 @@ export default {
               })
               .catch(error => {
                 this.showError_Create(error);
-              })
+              });
           }
         }
       });
@@ -184,7 +183,7 @@ export default {
       this.form.public = true;
     }
   }
-}
+};
 </script> 
 
 <style scoped>

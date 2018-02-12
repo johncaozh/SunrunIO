@@ -1,7 +1,7 @@
  <template>
   <div>
     <div class="slotInHeader">
-      <el-button type="primary" @click="dialogFormVisible = true">新建</el-button>
+      <el-button type="primary" @click="dialogFormVisible = true">新建平台</el-button>
     </div>
     <el-dialog title="新建" :visible.sync="dialogFormVisible" @close="resetForm('form')">
       <el-form :model="form" ref="form">
@@ -57,7 +57,7 @@
           {{scope.row.public?'是':'否'}}
         </template>
       </el-table-column>
-    <!-- <el-table-column prop="createTime" label="创建时间" min-width="100" sortable>
+      <!-- <el-table-column prop="createTime" label="创建时间" min-width="100" sortable>
         <template scope="scope">
           {{scope.row.createTime|dateConverter(null)}}
         </template>
@@ -69,7 +69,7 @@
       </el-table-column> -->
       <el-table-column prop="_createUser.name" label="创建者" min-width="100" sortable>
       </el-table-column>
-      <el-table-column prop="_lastUpdateUser.name" label="最后修改者" min-width="100" sortable>
+      <el-table-column prop="_lastUpdateUser.name" label="修改者" min-width="100" sortable>
       </el-table-column>
       <el-table-column label="操作菜单" min-width="100">
         <template scope="scope">
@@ -160,12 +160,14 @@ export default {
       this.form.name = this.dataWait2Edit.name;
       this.form.desc = this.dataWait2Edit.desc;
       this.form.side = this.dataWait2Edit.side;
-      this.form.productId = this.dataWait2Edit.productId;
+      this.form.os = this.dataWait2Edit.os;
+      this.form._product = this.dataWait2Edit.productId;
       this.form.public = this.dataWait2Edit.public;
       this.dialogFormVisible = true;
     },
 
     submitForm(formName) {
+      console.log(formName);
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.dataWait2Edit) {
@@ -175,9 +177,11 @@ export default {
                 this.showSuccess_Update();
                 this.resetForm(formName);
                 this.listData();
+                this.dialogFormVisible = false;
               })
               .catch(error => {
                 this.showError_Update(error);
+                this.dialogFormVisible = false;
               });
           } else {
             this.form._product = this.productId;

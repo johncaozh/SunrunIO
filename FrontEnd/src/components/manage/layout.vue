@@ -1,9 +1,9 @@
  <template>
   <div>
     <logo class="logo" :value="1" />
-    <authentication class="authentication" style="margin-top:-5px" />
+    <authentication class="authentication" style="margin-top:-5px;margin-right:10px" />
     <el-row style="height:100%;">
-      <el-menu theme="dark" :default-active="defaultActive" mode="horizontal" :router="true" class="menu" style="padding-right:120px">
+      <el-menu theme="dark" :default-active="defaultActive" mode="horizontal" :router="true" class="menu" style="padding-right:150px">
         <el-menu-item index="/manager/users" style="float:right">用户</el-menu-item>
         <el-menu-item index="/manager/versions" style="float:right">版本</el-menu-item>
         <el-menu-item index="/manager/platforms" style="float:right">平台</el-menu-item>

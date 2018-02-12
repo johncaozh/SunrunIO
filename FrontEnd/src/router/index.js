@@ -24,14 +24,14 @@ export default new Router({
       path: '/layout',
       component: resolve => require(['../components/normal/layout.vue'], resolve),
       children: [{
-          path: '/packages',
+          path: '/products/:id/packages',
           component: resolve => require(['../components/normal/packages.vue'], resolve)
         }, {
-          path: '/faqs',
+          path: '/products/:id/faqs',
           component: resolve => require(['../components/normal/faqs.vue'], resolve)
         },
         {
-          path: '/docs',
+          path: '/products/:id/docs',
           component: resolve => require(['../components/normal/docs.vue'], resolve)
         },
       ]
@@ -61,6 +61,9 @@ export default new Router({
     }, {
       path: '/manager/products',
       component: resolve => require(['../components/manage/products.vue'], resolve),
+    }, {
+      path: '/manager/links',
+      component: resolve => require(['../components/manage/links.vue'], resolve),
     }, {
       path: '/manager/layout',
       component: resolve => require(['../components/manage/layout.vue'], resolve),

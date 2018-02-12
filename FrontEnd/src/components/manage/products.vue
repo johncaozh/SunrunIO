@@ -3,8 +3,8 @@
     <div class="headerDiv">
       <logo class="logo" />
       <div class="slotInHeader" style="right:20px;margin-top:-5px">
-        <el-button type="primary" @click="dialogFormVisible=true">新建</el-button>
-        <authentication style="margin-left:30px"/>
+        <el-button type="primary" @click="dialogFormVisible=true">新建产品</el-button>
+        <authentication style="margin-left:50px" />
       </div>
     </div>
     <el-dialog title="新建" :visible.sync="dialogFormVisible" @close="resetForm('form') ">
@@ -50,10 +50,9 @@
       <el-table-column prop="public" label="是否公开 " min-width="100 " sortable>
         <template scope="scope ">
           {{scope.row.public?'是':'否'}}
-          </el-row>
         </template>
       </el-table-column>
-       <el-table-column prop="createTime" label="创建时间" min-width="100" sortable>
+      <el-table-column prop="createTime" label="创建时间" min-width="100" sortable>
         <template scope="scope">
           {{scope.row.createTime|dateConverter(null)}}
         </template>
@@ -65,7 +64,7 @@
       </el-table-column>
       <el-table-column prop="_createUser.name" label="创建者" min-width="100" sortable>
       </el-table-column>
-      <el-table-column prop="_lastUpdateUser.name" label="最后修改者" min-width="100" sortable>
+      <el-table-column prop="_lastUpdateUser.name" label="修改者" min-width="100" sortable>
       </el-table-column>
       <el-table-column prop="logoUrl " label="操作菜单 " min-width="100 ">
         <template scope="scope ">

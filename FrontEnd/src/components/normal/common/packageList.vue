@@ -14,6 +14,7 @@
                                 <span class="title">V{{item.version}}</span>
                                 <span class="size">{{item.size|sizeUnitConverter(item.size)}}</span>
                                 <el-button type="text" size="small" class="download" @click="download(item._id)">下载</el-button>
+                                <el-button type="text" size="small" class="download" @click="copyLink(item._id)">复制链接</el-button>
                             </span>
                             <p class="desc" v-html="item.desc">
                             </p>
@@ -28,112 +29,123 @@
 </template>
 <script>
 import api from "../../../config/api";
-import download from '../../../config/mixin/download'
-import empty from '../../common/empty'
-import loading from '../../common/loading'
+import download from "../../../config/mixin/download";
+import message from "../../../config/mixin/message";
+import empty from "../../common/empty";
+import loading from "../../common/loading";
 
 export default {
-    mixins: [download],
-    data() {
-        return {
-            packages: [],
-            loading: false,
-        }
+  mixins: [download, message],
+  data() {
+    return {
+      packages: [],
+      loading: false
+    };
+  },
+
+  components: {
+    empty,
+    loading
+  },
+
+  props: {
+    productId: {
+      required: true,
+      default: null,
+      type: String
     },
-
-    components: {
-        empty,
-        loading
+    versionId: {
+      required: true,
+      default: null,
+      type: String
     },
-
-    props: {
-        productId: {
-            required: true,
-            default: null,
-            type: String,
-        },
-        versionId: {
-            required: true,
-            default: null,
-            type: String,
-        },
-        platformId: {
-            required: true,
-            default: null,
-            type: String,
-        },
-        autoLoadData: {
-            required: false,
-            default: false,
-            type: Boolean
-        }
+    platformId: {
+      required: true,
+      default: null,
+      type: String
     },
-
-    mounted() {
-        this.getPackages();
-    },
-
-    methods: {
-        getPackages() {
-            if (this.productId && this.versionId && this.platformId) {
-                this.packages = [];
-                this.loading = true;
-                api.getPackages(this.productId, this.versionId, this.platformId)
-                    .then(res => {
-                        this.loading = false;
-                        this.packages = res.data.data;
-                    })
-                    .catch(error => {
-                        this.loading = false;
-                        this.$message.error('获取失败。');
-                    });
-            }
-        },
-
-        refresh() {
-            this.getPackages();
-        }
-    },
-
-    watch: {
-        productId: function() {
-            if (this.autoLoadData)
-                this.getPackages();
-        },
-
-        versionId: function() {
-            if (this.autoLoadData)
-                this.getPackages();
-        },
-
-        platformId: function() {
-            if (this.autoLoadData)
-                this.getPackages();
-        },
+    autoLoadData: {
+      required: false,
+      default: false,
+      type: Boolean
     }
-}
+  },
+
+  mounted() {
+    this.getPackages();
+  },
+
+  methods: {
+    getPackages() {
+      if (this.productId && this.versionId && this.platformId) {
+        this.packages = [];
+        this.loading = true;
+        api
+          .getPackages(this.productId, this.versionId, this.platformId)
+          .then(res => {
+            this.loading = false;
+            this.packages = res.data.data;
+          })
+          .catch(error => {
+            this.loading = false;
+            this.$message.error("获取失败。");
+          });
+      }
+    },
+
+    refresh() {
+      this.getPackages();
+    },
+
+    copyLink(id) {
+      var instance = this;
+      this.$copyText(`${window.location.host}/packages/${id}`).then(
+        function(e) {
+          instance.showSuccess("已复制到剪贴板。");
+        },
+        function(e) {
+          instance.showError(null, "复制到剪贴板失败。");
+        }
+      );
+    }
+  },
+
+  watch: {
+    productId: function() {
+      if (this.autoLoadData) this.getPackages();
+    },
+
+    versionId: function() {
+      if (this.autoLoadData) this.getPackages();
+    },
+
+    platformId: function() {
+      if (this.autoLoadData) this.getPackages();
+    }
+  }
+};
 </script>
 
 <style scoped>
 li {
-    list-style-type: none;
-    cursor: pointer;
+  list-style-type: none;
+  cursor: pointer;
 }
 
 li:hover .node {
-    width: 17px;
-    height: 17px;
-    background-color: #20a0ff;
-    border: 0;
+  width: 17px;
+  height: 17px;
+  background-color: #20a0ff;
+  border: 0;
 }
 
 .list-enter-active {
-    transition: all .8s;
+  transition: all 0.8s;
 }
 
 .list-enter {
-    opacity: 0;
-    transform: translateY(100px);
+  opacity: 0;
+  transform: translateY(100px);
 }
 </style>
 

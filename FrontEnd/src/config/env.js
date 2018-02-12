@@ -1,11 +1,11 @@
 const serverConfig = {
   requestTimeout: 60000,
-  // serverEndPoint: "http://10.11.13.254:3000/",
-  // serverUploadUrl: "http://10.11.13.254:3000/upload",
-  // serverDownloadUrl: "http://10.11.13.254:3000/download",
-  serverEndPoint: "http://localhost:3000/",
-  serverUploadUrl: "http://localhost:3000/upload",
-  serverDownloadUrl: "http://localhost:3000/download",
+  serverEndPoint: "http://10.11.13.254:3000/",
+  serverUploadUrl: "http://10.11.13.254:3000/upload",
+  serverDownloadUrl: "http://10.11.13.254:3000/download",
+  // serverEndPoint: "http://localhost:3000/",
+  // serverUploadUrl: "http://localhost:3000/upload",
+  // serverDownloadUrl: "http://localhost:3000/download",
   iamLoginRedirectUrl: "https://192.168.0.180:9531/sunruniam/sso/login",
   iamLogoutRedirectUrl: "https://192.168.0.180:9531/sunruniam/sso/logout",
   iamLoginSegment: "iam/login",
@@ -15,6 +15,7 @@ const serverConfig = {
   versionSegment: "versions",
   docsSegment: "documents",
   faqsSegment: "faqs",
+  linksSegment: "links",
   usersSegment: "users",
   platformSegment: "platforms",
   packagesSegment: "packages",
@@ -56,6 +57,10 @@ const constants = {
     {
       value: 'Linux',
       label: 'Linux'
+    },
+    {
+      value: 'Centos',
+      label: 'Centos'
     },
     {
       value: 'Redhat',

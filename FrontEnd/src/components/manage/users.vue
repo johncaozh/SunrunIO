@@ -1,7 +1,7 @@
  <template>
   <div>
     <div class="slotInHeader">
-      <el-button type="primary" @click="dialogFormVisible = true">新建</el-button>
+      <el-button type="primary" @click="dialogFormVisible = true">添加产品用户</el-button>
     </div>
     <el-dialog title="新建" :visible.sync="dialogFormVisible" @close="resetForm('form')" @open="openIamUserForm('form')">
       <div style="overflow-y:auto;max-height:500px">
@@ -39,7 +39,7 @@
       </el-table-column>
       <el-table-column prop="_createUser.name" label="创建者" min-width="100" sortable>
       </el-table-column>
-      <el-table-column prop="_lastUpdateUser.name" label="最后修改者" min-width="100" sortable>
+      <el-table-column prop="_lastUpdateUser.name" label="修改者" min-width="100" sortable>
       </el-table-column> -->
       <el-table-column label="操作菜单" min-width="100">
         <template scope="scope">

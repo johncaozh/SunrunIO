@@ -1,16 +1,19 @@
 <template>
   <div>
-    <div class="slotInHeader">
-      <el-button type="primary" @click="dialogFormVisible = true">新建FAQ</el-button>
+    <div class="headerDiv">
+      <logo class="logo" />
+      <div class="slotInHeader" style="right:20px;margin-top:-5px">
+        <el-button type="primary" @click="dialogFormVisible=true">新建链接</el-button>
+        <authentication style="margin-left:50px" />
+      </div>
     </div>
     <el-dialog title="新建" :visible.sync="dialogFormVisible" @close="resetForm('form')">
-      <el-form :model="form" ref="form">
-        <el-form-item label="请输入标题" :rules="[ { required: true, message: '请输入标题'}]" prop="name">
+      <el-form :model="form" ref="form" :rules="urlRule">
+        <el-form-item label="请输入链接名称" :rules="[ { required: true, message: '请输入链接名称'}]" prop="name">
           <el-input v-model="form.name" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="请输入内容" :rules="[ { required: true, message: '请输入内容'}]" prop="desc">
-          <quill-editor class="quill-editor" v-model="form.desc" ref="myQuillEditor">
-          </quill-editor>
+        <el-form-item label="请输入链接地址" prop="url">
+          <el-input v-model="form.url" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -20,38 +23,24 @@
       </div>
     </el-dialog>
     <el-table :data="tableData" style="width:100%" v-loading.body="loading" :default-sort="{prop: 'name', order: 'descending'}">
-      <el-table-column type="expand">
-        <template scope="props">
-          <P v-html="props.row.desc">
-          </P>
-        </template>
+      <el-table-column prop="name" label="链接名称" min-width="300">
       </el-table-column>
-      <el-table-column prop="name" label="FAQ标题" min-width="400">
+      <el-table-column prop="url" label="链接地址" min-width="400">
       </el-table-column>
       <el-table-column prop="public" label="是否公开" min-width="100" sortable>
         <template scope="scope">
           {{scope.row.public?'是':'否'}}
         </template>
       </el-table-column>
-      <!-- <el-table-column prop="createTime" label="创建时间" min-width="100" sortable>
-        <template scope="scope">
-          {{scope.row.createTime|dateConverter(null)}}
-        </template>
-      </el-table-column>
-      <el-table-column prop="updateTime" label="修改时间" min-width="100" sortable>
-        <template scope="scope">
-          {{scope.row.updateTime|dateConverter(null)}}
-        </template>
-      </el-table-column> -->
       <el-table-column prop="_createUser.name" label="创建者" min-width="100" sortable>
       </el-table-column>
       <el-table-column prop="_lastUpdateUser.name" label="修改者" min-width="100" sortable>
       </el-table-column>
-      <el-table-column prop="logoUrl" label="操作菜单" min-width="100">
+      <el-table-column prop="logoUrl" label="操作菜单" min-width="120">
         <template scope="scope">
           <el-button type="text" size="small" @click="editData(scope.row)"> 编辑</el-button>
           <el-button type="text" size="small" @click="deleteData(scope.row._id)">删除</el-button>
-          <el-button type="text" size="small" @click="copyLink(scope.row._id)">复制链接</el-button>
+          <el-button type="text" size="small" @click="openLink(scope.row.url)">打开链接</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -62,21 +51,49 @@
 import api from "../../config/api";
 import env from "../../config/env";
 import sessionStorage from "../../config/sessionStore";
-import { quillEditor } from "vue-quill-editor";
 import message from "../../config/mixin/message";
+import logo from "../common/logo";
+import authentication from "../common/authentication";
+import validator from "validator";
 
 export default {
   mixins: [message],
   data() {
+    var checkUrl = (rule, value, callback) => {
+      if (!value) {
+        return callback();
+      }
+
+      if (!value.startsWith("http://") && !value.startsWith("https://")) {
+        return callback(new Error("请填写带http或https协议头的合法URL"));
+      }
+
+      var isUrl = validator.isURL(value, ["http", "https"]);
+
+      if (isUrl) {
+        return callback();
+      } else {
+        return callback(new Error("请填写带http或https协议头的合法URL"));
+      }
+    };
+
     return {
       tableData: [],
       loading: false,
       dialogFormVisible: false,
       form: {
         name: "",
-        desc: "",
+        url: "",
         public: true,
         _product: ""
+      },
+      urlRule: {
+        url: [
+          {
+            validator: checkUrl,
+            trigger: "blur"
+          }
+        ]
       },
       dataWait2Edit: null,
       productId: null
@@ -86,21 +103,19 @@ export default {
   computed: {},
 
   components: {
-    quillEditor
+    logo,
+    authentication
   },
 
   mounted() {
-    this.productId = sessionStorage.getProductId();
-
-    if (this.productId) this.listData();
-    else this.$router.push("/products");
+    this.listData();
   },
 
   methods: {
     listData() {
       this.loading = true;
       api
-        .getFaqs(this.productId)
+        .getLinks(this.productId)
         .then(res => {
           this.tableData = res.data.data;
           this.loading = false;
@@ -117,7 +132,7 @@ export default {
         type: "warning"
       }).then(() => {
         api
-          .deleteFaq(id)
+          .deleteLink(id)
           .then(res => {
             this.showSuccess_Delete();
             this.tableData.remove("_id", id);
@@ -128,24 +143,18 @@ export default {
       });
     },
 
-    copyLink(id) {
-      var instance = this;
-      this.$copyText(`${window.location.host}/faqs/${id}`).then(
-        function(e) {
-          instance.showSuccess("已复制到剪贴板。");
-        },
-        function(e) {
-          instance.showError(null, "复制到剪贴板失败。");
-        }
-      );
+    openLink(url) {
+      var a = document.createElement("a");
+      a.href = url;
+      a.target = "_blank";
+      a.click();
     },
 
     editData(data) {
       this.dataWait2Edit = data;
       this.form.name = this.dataWait2Edit.name;
-      this.form.desc = this.dataWait2Edit.desc;
+      this.form.url = this.dataWait2Edit.url;
       this.form.public = this.dataWait2Edit.public;
-      this.form._product = this.dataWait2Edit._product;
       this.dialogFormVisible = true;
     },
 
@@ -154,7 +163,7 @@ export default {
         if (valid) {
           if (this.dataWait2Edit) {
             api
-              .updateFaq(this.dataWait2Edit._id, this.form)
+              .updateLink(this.dataWait2Edit._id, this.form)
               .then(res => {
                 this.showSuccess_Update();
                 this.resetForm(formName);
@@ -164,9 +173,8 @@ export default {
                 this.showError_Update(error);
               });
           } else {
-            this.form._product = this.productId;
             api
-              .createFaq(this.form)
+              .createLink(this.form)
               .then(res => {
                 this.showSuccess_Create();
                 this.resetForm(formName);

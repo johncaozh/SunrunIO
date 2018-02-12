@@ -1,7 +1,7 @@
  <template>
   <div>
     <div class="slotInHeader">
-      <el-button type="primary" @click="dialogFormVisible = true">新建</el-button>
+      <el-button type="primary" @click="dialogFormVisible = true">上传文档</el-button>
     </div>
     <el-dialog title="上传文档" :visible.sync="dialogFormVisible" @close="resetForm('form')">
       <el-upload class="upload-demo" :multiple="true" :action="uploadUrl" :file-list="fileList" :with-credentials="true" :on-success="handleFileSuccess">
@@ -19,7 +19,6 @@
           <div class="horizontalDiv">
             <file-icon :fileName="scope.row.name" class="fileIcon" />{{scope.row.name}}
           </div>
-          </el-row>
         </template>
       </el-table-column>
       <el-table-column prop="size" label="大小" min-width="100" sortable>
@@ -42,7 +41,7 @@
           {{scope.row.public?'是':'否'}}
         </template>
       </el-table-column>
-       <!-- <el-table-column prop="createTime" label="创建时间" min-width="100" sortable>
+      <!-- <el-table-column prop="createTime" label="创建时间" min-width="100" sortable>
         <template scope="scope">
           {{scope.row.createTime|dateConverter(null)}}
         </template>
@@ -54,12 +53,13 @@
       </el-table-column> -->
       <el-table-column prop="_createUser.name" label="创建者" min-width="100" sortable>
       </el-table-column>
-      <el-table-column prop="_lastUpdateUser.name" label="最后修改者" min-width="100" sortable>
+      <el-table-column prop="_lastUpdateUser.name" label="修改者" min-width="100" sortable>
       </el-table-column>
       <el-table-column label="操作菜单" min-width="100">
         <template scope="scope">
           <el-button type="text" size="small" @click="download(scope.row._id)">下载</el-button>
           <el-button type="text" size="small" @click="deleteData(scope.row._id)">删除</el-button>
+          <el-button type="text" size="small" @click="copyLink(scope.row._id)">复制链接</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -129,6 +129,18 @@ export default {
             this.showError_Delete(error);
           });
       });
+    },
+
+    copyLink(id) {
+      var instance = this;
+      this.$copyText(`${window.location.host}/docs/${id}`).then(
+        function(e) {
+          instance.showSuccess("已复制到剪贴板。");
+        },
+        function(e) {
+          instance.showError(null, "复制到剪贴板失败。");
+        }
+      );
     },
 
     submitForm(formName) {
