@@ -46,7 +46,7 @@ router.get("/iam/login", function (req, res, next) {
         next();
     }
 
-    var getAcessTokenUrl = `${env.iamConfig.service}/oauth2/token?grant_type=client_credentials&access_key=${env.iamConfig.access_key}&access_secret=${env.iamConfig.access_secret}&scope=SunrunIAM-api:*:*:*`
+    var getAcessTokenUrl = `${env.iamConfig.service}/oauth2/token?grant_type=client_credentials&access_key=${env.iamConfig.access_key}&access_secret=${env.iamConfig.access_secret}&scope=iam-api:*:*:*`
 
     rq({
             url: getAcessTokenUrl,

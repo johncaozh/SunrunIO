@@ -37,7 +37,7 @@ const notificationConfig = {
 };
 
 const iamConfig = {
-    service: "https://192.168.0.180:9531/sunruniam",
+    service: "https://10.50.0.5:9531/iam",
     access_key: "fEHgYhl4Uk7kwIxYXKVbw5aYXycKLL28",
     access_secret: "Aej2yh1JJHR72rpCE0WPiM3srvnWue",
     registerProductName: "SunrunIO",
