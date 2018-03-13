@@ -37,9 +37,9 @@ const notificationConfig = {
 };
 
 const iamConfig = {
-    service: "https://10.50.0.5:9531/sunruniam",
-    access_key: "fEHgYhl4Uk7kwIxYXKVbw5aYXycKLL28",
-    access_secret: "Aej2yh1JJHR72rpCE0WPiM3srvnWue",
+    service: "https://10.50.0.5:9531/iam",
+    access_key: "Ewx3EBwZWhGxip8tVFZO2RCLsUTCKz1",
+    access_secret: "9P7AkNiuR586Jt5CFDyHPSQjqexZwX",
     registerProductName: "SunrunIO",
 }
 
