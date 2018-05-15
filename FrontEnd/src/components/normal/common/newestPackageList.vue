@@ -9,7 +9,7 @@
               <div class="circleDiv">
                 <os-platform :os="item._platform.os" style="width:64px;height:64px" />
               </div>
-              <h3> 最新版 for {{item._platform.name}}
+              <h3 style="height:25px;padding-left:15px;padding-right:15px"> 最新版 For {{item._platform.name}}
                 <i class="el-icon-share i-copyLink" @click="copyLink(item._id)" title="复制链接"/>
               </h3>
               <p style="line-height:20px;text-align:center">

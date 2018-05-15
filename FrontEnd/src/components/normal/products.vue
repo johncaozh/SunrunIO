@@ -28,7 +28,7 @@
               <div class="circleDiv">
                 <img v-lazy="item.logoUrl" style="width:64px;height:64px">
               </div>
-              <h3>{{item.name}}</h3>
+              <h3 style="height:25px">{{item.name}}</h3>
               <p style="padding-left:15px;padding-right:15px;">{{item.desc}}</p>
               <div class="bottomOperate" @click="$router.push(`/products/${item._id}/packages`)">
                 查看详情
