@@ -47,7 +47,7 @@ const schema = mongoose.Schema({
 
 schema.pre('remove', function (next) {
     require('./package').remove({
-        _product: this._id
+        _platform: this._id
     }).exec();
    
     next();

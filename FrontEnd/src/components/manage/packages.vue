@@ -54,7 +54,8 @@
         <template scope="scope">
           <div class="horizontalDiv">
             <div class="circleDiv namePrefix">
-              <os-platform :os="scope.row._platform.os" style="width:32px;height:32px" />
+              <os-platform :os="scope.row._platform.os" style="width:32px;height:32px" v-if="scope.row._platform"/>
+              <div v-else style="line-height:32px;width:32px;">未知</div>
             </div>
             {{scope.row.name}}
           </div>
