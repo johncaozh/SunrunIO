@@ -38,9 +38,9 @@ const notificationConfig = {
 
 const iamConfig = {
     service: "https://10.50.0.5:9531/iam",
-    access_key: "Ewx3EBwZWhGxip8tVFZO2RCLsUTCKz1",
-    access_secret: "9P7AkNiuR586Jt5CFDyHPSQjqexZwX",
-    registerProductName: "SunrunIO",
+    access_key: "A3siA4JN5dKH9zVmgm2C5hImLrtXuE645",
+    access_secret: "bLyEJ3YhgAJiSC6bwwFgFO5vsN7Skr",
+    registerProductName: "pm",
 }
 
 module.exports = {

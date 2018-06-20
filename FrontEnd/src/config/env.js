@@ -1,9 +1,9 @@
 const serverConfig = {
   requestTimeout: 60000,
-  serverEndPoint: "http://10.11.13.254:3000/",
+  // serverEndPoint: "http://10.11.13.254:3000/",
   serverUploadUrl: "http://10.11.13.254:3000/upload",
   serverDownloadUrl: "http://10.11.13.254:3000/download",
-  // serverEndPoint: "http://localhost:3000/",
+  serverEndPoint: "http://localhost:3000/",
   // serverUploadUrl: "http://localhost:3000/upload",
   // serverDownloadUrl: "http://localhost:3000/download",
   iamLoginRedirectUrl: "https://10.50.0.5:9531/iam/sso/login",
