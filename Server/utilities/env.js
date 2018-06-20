@@ -40,7 +40,7 @@ const iamConfig = {
     service: "https://10.50.0.5:9531/iam",
     access_key: "fEHgYhl4Uk7kwIxYXKVbw5aYXycKLL28",
     access_secret: "Aej2yh1JJHR72rpCE0WPiM3srvnWue",
-    registerProductName: "SunrunIO",
+    registerProductName: "pm",
 }
 
 module.exports = {
